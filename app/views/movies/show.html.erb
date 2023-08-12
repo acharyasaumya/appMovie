@@ -1,0 +1,7 @@
+<!-- app/views/movies/show.html.erb -->
+<h1><%= @movie_details['title'] %></h1>
+<p><strong>Overview:</strong> <%= @movie_details['overview'] %></p>
+<p><strong>Release Date:</strong> <%= @movie_details['release_date'] %></p>
+<p><strong>Vote Average:</strong> <%= @movie_details['vote_average'] %></p>
+
+<%= link_to 'Back to Movie List', movies_path %>

@@ -1,0 +1,19 @@
+<!-- app/views/movies/index.html.erb -->
+<h1>Latest Movies</h1>
+
+<%= form_tag(movies_path, method: 'get', class: 'search-form') do %>
+  <%= label_tag :search, 'Search by movie title' %>
+  <%= text_field_tag :search, params[:search], class: 'search-field', placeholder: 'Enter movie title...' %>
+  <%= submit_tag 'Search', class: 'search-button' %>
+<% end %>
+
+<ul>
+  <% @latest_movie.each do |movie| %>
+    <li>
+      <%= link_to movie['title'], movie_path(movie['id']) %>
+      <%= form_tag add_to_favorites_movie_path(movie['id']), method: :post, class: 'add-to-favorites-form' do %>
+        <%= submit_tag 'Add to Favorites', class: 'add-to-favorites-button' %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
