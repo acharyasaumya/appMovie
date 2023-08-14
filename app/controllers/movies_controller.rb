@@ -2,7 +2,6 @@ class MoviesController < ApplicationController
   require 'themoviedb-api'
 
   before_action :initialize_session
-  api_key = 
   def index
     begin
       @latest_movie = fetch_upcoming_movies
@@ -54,6 +53,7 @@ class MoviesController < ApplicationController
   end
 
   def fetch_movie_details(movie_id)
+   
     response = HTTParty.get("https://api.themoviedb.org/3/movie/#{movie_id}?api_key=#{api_key}")
     JSON.parse(response.body)
   end

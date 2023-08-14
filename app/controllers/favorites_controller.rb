@@ -7,21 +7,24 @@ class FavoritesController < ApplicationController
   end
 
   private
-
   def fetch_favorite_movies
-    Rails.logger.info("Fetch fav was called")
-    favorite_movie_ids = @fav_ids
+    Rails.logger.info("Fetch fav was called now")
+    favorite_movie_ids = session[:fav_ids]
     Rails.logger.info("#{favorite_movie_ids}")
     return [] if favorite_movie_ids.blank?
 
-    api_key = 'd7143e44b3214786f97ab592245abff3'
-    movie_ids_string = favorite_movie_ids.join(',')
-    api_url = "https://api.themoviedb.org/3/movie/#{movie_ids_string}?api_key=#{api_key}"
+    favorite_movies = []
 
-    response = HTTParty.get(api_url)
-    handle_api_response(response)
+    favorite_movie_ids.each do |movie_id|
+      api_url = "https://api.themoviedb.org/3/movie/#{movie_id}?api_key=#{api_key}"
+
+      response = HTTParty.get(api_url)
+      movie_details = handle_api_response(response)
+      favorite_movies << movie_details unless movie_details.empty?
+    end
+
+    favorite_movies
   end
-
   def handle_api_response(response)
     if response.success?
       JSON.parse(response.body)
@@ -32,5 +35,8 @@ class FavoritesController < ApplicationController
   rescue JSON::ParserError => e
     Rails.logger.error("Error parsing TMDb API response: #{e.message}")
     [] # Return an empty array if JSON parsing fails
+  end
+  def api_key
+    ENV['TMDB_API_KEY']
   end
 end
